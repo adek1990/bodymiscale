@@ -194,7 +194,6 @@ action:
   - delay: "00:00:15"
 
   - variables:
-      notification_id: "{{ context.id }}"
       current_weight: "{{ states(weight_sensor) | float(0) }}"
       impedance: "{{ states(impedance_sensor) | float(0) }}"
       profile_id: "{{ states(profile_id_sensor) | int() }}"
