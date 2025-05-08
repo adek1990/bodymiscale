@@ -209,13 +209,8 @@ blueprint:
       #Sélectionnez l'entité input_number contenant le poids de la personne tenant l'objet.
 
 variables:
-  title_notify: !input title_notify
-  message_notify: !input message_notify
-  response_timeout_seconds: !input response_timeout_seconds
   weight_sensor: !input weight_sensor
   impedance_sensor: !input impedance_sensor
-  split_weight_threshold: !input split_weight_threshold
-  split_weight_direction: !input split_weight_direction
   weight: "{{ states(weight_sensor) | float(0) }}"
   user1_name: !input user1_name
   user1_profile_id: !input user1_profile_id
@@ -250,55 +245,15 @@ action:
       notification_id: "{{ context.id }}"
       current_weight: "{{ states(weight_sensor) | float(0) }}"
       impedance: "{{ states(impedance_sensor) | float(0) }}"
-      group2_condition: >
-        {{ (user4_name | string != '' or user5_name | string != '' or user6_name | string != '') and (
-            (split_weight_direction == 'below' and current_weight <= split_weight_threshold | float(0)) or
-            (split_weight_direction == 'above' and current_weight > split_weight_threshold | float(0))
-        ) }}
-      notification_actions: >
-        {% set actions_list = [] %}
-          {% if user1_name | string != '' %}
-            {% set actions_list = actions_list + [{'action': user1_name | lower | replace(' ', '_'), 'title': user1_name}] %}
-          {% endif %}
-          {% if user2_name | string != '' %}
-            {% set actions_list = actions_list + [{'action': user2_name | lower | replace(' ', '_'), 'title': user2_name}] %}
-          {% endif %}
-          {% if user3_name | string != '' %}
-            {% set actions_list = actions_list + [{'action': user3_name | lower | replace(' ', '_'), 'title': user3_name}] %}
-          {% endif %}
-        {{ actions_list }}
+      profile_id: "{{ states(profile_id) | int() }}"
   - condition: template
     value_template: "{{ current_weight != 0 }}"
-  - if: "{{ notification_actions | length > 0 }}"
+  - if: "{{ profile_id | length > 0 }}"
     then:
-      - domain: mobile_app
-        type: notify
-        device_id: !input notify_device
-        message: "{{ message_notify }} {{ current_weight }} kg ?"
-        title: "{{ title_notify }}"
-        data:
-          actions: "{{ notification_actions }}"
-      - wait_for_trigger:
-          - trigger: event
-            event_type: mobile_app_notification_action
-            event_data:
-              action: "{{ user1_name | lower | replace(' ', '_') }}"
-          - trigger: event
-            event_type: mobile_app_notification_action
-            event_data:
-              action: "{{ user2_name | lower | replace(' ', '_') }}"
-          - trigger: event
-            event_type: mobile_app_notification_action
-            event_data:
-              action: "{{ user3_name | lower | replace(' ', '_') }}"
-
-        timeout: >
-          {{ '00:{:02d}:{:02d}'.format((response_timeout_seconds | int(0)) // 60, (response_timeout_seconds | int(0)) % 60) }}
-        continue_on_timeout: false
       - choose:
           - conditions:
               - condition: template
-                value_template: "{{ wait.trigger.event.data.action == (user1_name | lower | replace(' ', '_')) }}"
+                value_template: "{{ profile_id == user1_profile_id }}"
             sequence:
               - variables:
                   final_weight_user1: >
@@ -307,7 +262,7 @@ action:
                     {% else %}
                       {{ current_weight }}
                     {% endif %}
-              - action: input_number.set_value
+              - service: input_number.set_value
                 target:
                   entity_id: "{{ user1_weight }}"
                 data:
@@ -317,7 +272,7 @@ action:
                       - condition: template
                         value_template: "{{ user1_impedance != '' and impedance_sensor is defined and impedance_sensor != '' and states(impedance_sensor) not in ['unavailable', 'unknown'] }}"
                     sequence:
-                      - action: input_number.set_value
+                      - service: input_number.set_value
                         target:
                           entity_id: "{{ user1_impedance }}"
                         data:
@@ -327,14 +282,15 @@ action:
                       - condition: template
                         value_template: "{{ user1_last_time != '' }}"
                     sequence:
-                      - action: input_datetime.set_datetime
+                      - service: input_datetime.set_datetime
                         target:
                           entity_id: "{{ user1_last_time }}"
                         data:
                           datetime: "{{ now().isoformat() }}"
+  
           - conditions:
               - condition: template
-                value_template: "{{ wait.trigger.event.data.action == (user2_name | lower | replace(' ', '_')) }}"
+                value_template: "{{ profile_id == user2_profile_id }}"
             sequence:
               - variables:
                   final_weight_user2: >
@@ -343,7 +299,7 @@ action:
                     {% else %}
                       {{ current_weight }}
                     {% endif %}
-              - action: input_number.set_value
+              - service: input_number.set_value
                 target:
                   entity_id: "{{ user2_weight }}"
                 data:
@@ -353,7 +309,7 @@ action:
                       - condition: template
                         value_template: "{{ user2_impedance != '' and impedance_sensor is defined and impedance_sensor != '' and states(impedance_sensor) not in ['unavailable', 'unknown'] }}"
                     sequence:
-                      - action: input_number.set_value
+                      - service: input_number.set_value
                         target:
                           entity_id: "{{ user2_impedance }}"
                         data:
@@ -363,14 +319,15 @@ action:
                       - condition: template
                         value_template: "{{ user2_last_time != '' }}"
                     sequence:
-                      - action: input_datetime.set_datetime
+                      - service: input_datetime.set_datetime
                         target:
                           entity_id: "{{ user2_last_time }}"
                         data:
                           datetime: "{{ now().isoformat() }}"
+  
           - conditions:
               - condition: template
-                value_template: "{{ wait.trigger.event.data.action == (user3_name | lower | replace(' ', '_')) }}"
+                value_template: "{{ profile_id == user3_profile_id }}"
             sequence:
               - variables:
                   final_weight_user3: >
@@ -379,7 +336,7 @@ action:
                     {% else %}
                       {{ current_weight }}
                     {% endif %}
-              - action: input_number.set_value
+              - service: input_number.set_value
                 target:
                   entity_id: "{{ user3_weight }}"
                 data:
@@ -389,7 +346,7 @@ action:
                       - condition: template
                         value_template: "{{ user3_impedance != '' and impedance_sensor is defined and impedance_sensor != '' and states(impedance_sensor) not in ['unavailable', 'unknown'] }}"
                     sequence:
-                      - action: input_number.set_value
+                      - service: input_number.set_value
                         target:
                           entity_id: "{{ user3_impedance }}"
                         data:
@@ -399,7 +356,7 @@ action:
                       - condition: template
                         value_template: "{{ user3_last_time != '' }}"
                     sequence:
-                      - action: input_datetime.set_datetime
+                      - service: input_datetime.set_datetime
                         target:
                           entity_id: "{{ user3_last_time }}"
                         data:
