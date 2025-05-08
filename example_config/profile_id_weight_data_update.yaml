@@ -1,7 +1,7 @@
 blueprint:
-  name: Interactive Notification User Selection and Weight Data Update
+  name: Profile ID User Selection and Weight Data Update
   description: |
-    Sends an interactive notification to select who is on the scale and updates their weight data.
+   Profile ID to select who is on the scale and updates their weight data.
     Additionally, you can create or update an input_datetime to automatically record the date and time of your last weigh-in.
   #Envoie une notification interactive pour sélectionner qui est sur la balance et met à jour ses données de poids.
   #De plus, vous pouvez créer ou mettre à jour un input_datetime pour enregistrer automatiquement la date et l'heure de votre dernière pesée.
