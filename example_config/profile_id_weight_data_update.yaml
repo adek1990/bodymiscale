@@ -24,6 +24,14 @@ blueprint:
           filter:
             domain: sensor
       default: ""
+    profile_id_sensor:
+      name: Profile id sensor
+      description: Profile id sensor
+      selector:
+        entity:
+          filter:
+            domain: sensor
+
 
     user1_name:
       name: User 1 Name
@@ -31,13 +39,17 @@ blueprint:
         text: {}
       description: Name of User 1.
     user1_profile_id:
-      name: User 1 Profile id
+      name: Profile ID – User 1
+      description: Numerical profile ID assigned by the scale for User 1 (e.g. 1)
+      default: 1
       selector:
-        entity:
-          filter:
-            domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User 1's impedance.
+        number:
+          min: 1
+          max: 100
+          mode: box
+          step: 1
+
+      
       #Nom de l'utilisateur 1.
     user1_weight:
       name: User 1 Weight Input Number
@@ -93,12 +105,15 @@ blueprint:
       description: Name of User 2.
       #Nom de l'utilisateur 2.
     user2_profile_id:
-      name: User 2 Profile ID
+      name: Profile ID – User 2
+      description: Numerical profile ID assigned by the scale for User 2 (e.g. 1)
+      default: 2
       selector:
-        entity:
-          filter:
-            domain: sensor
-      description: Profile ID of the sensor for User 1's weight.
+        number:
+          min: 1
+          max: 100
+          mode: box
+          step: 1
     user2_weight:
       name: User 2 Weight Input Number (Optional)
       selector:
@@ -154,13 +169,15 @@ blueprint:
       description: Name of User 3.
       #Nom de l'utilisateur 3.
     user3_profile_id:
-      name: User 3 Profile id
+      name: Profile ID – User 3
+      description: Numerical profile ID assigned by the scale for User 3 (e.g. 1)
+      default: 3
       selector:
-        entity:
-          filter:
-            domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User 3's impedance.
+        number:
+          min: 1
+          max: 100
+          mode: box
+          step: 1
     user3_weight:
       name: User 3 Weight Input Number (Optional)
       selector:
@@ -211,6 +228,7 @@ blueprint:
 variables:
   weight_sensor: !input weight_sensor
   impedance_sensor: !input impedance_sensor
+  profile_id_sensor: !input profile_id_sensor
   weight: "{{ states(weight_sensor) | float(0) }}"
   user1_name: !input user1_name
   user1_profile_id: !input user1_profile_id
