@@ -48,23 +48,23 @@ blueprint:
           max: 100
           mode: box
           step: 1
-    user2_weight:
-      name: User 2 Weight Input Number (Optional)
+    user1_weight:
+      name: User 1 Weight Input Number (Optional)
       selector:
         entity:
           filter:
             domain: input_number
       default: ""
-      description: Entity ID of the input_number for User 2's weight.
-      #ID d'entité du input_number pour le poids de l'utilisateur 2.
-    user2_impedance:
-      name: User 2 Impedance Input Number (Optional)
+      description: Entity ID of the input_number for User1's weight.
+
+    user1_impedance:
+      name: User 1 Impedance Input Number (Optional)
       selector:
         entity:
           filter:
             domain: input_number
       default: ""
-      description: Entity ID of the input_number for User 2's impedance.
+      description: Entity ID of the input_number for User 1's impedance.
       #ID d'entité du input_number pour l'impédance de l'utilisateur 1.
     user1_last_time:
       name: User 1 Last Weigh-in (Optional)
