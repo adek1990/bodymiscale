@@ -7,45 +7,6 @@ blueprint:
   #De plus, vous pouvez créer ou mettre à jour un input_datetime pour enregistrer automatiquement la date et l'heure de votre dernière pesée.
   domain: automation
   input:
-    notify_device:
-      name: Mobile App Device to Notify
-      description: |
-        The device ID of your mobile app to send the notification to.
-        Tip: To reply without unlocking your phone, make sure notifications are enabled on the lock screen.
-      #L'ID de l'appareil de votre application mobile auquel envoyer la notification.
-      #Astuce : pour pouvoir répondre sans déverrouiller votre téléphone, assurez-vous que les notifications sont activées sur l'écran de verrouillage.
-      selector:
-        device:
-          filter:
-            integration: mobile_app
-    title_notify:
-      name: Notification Title
-      selector:
-        text: {}
-      description: |
-        The title of the notification. Example: Connected scale
-      #Le titre de la notification. Exemple: Balance connectée
-    message_notify:
-      name: Notification Message
-      selector:
-        text: {}
-      description: |
-        The main message of the notification. Example: Who is on the scale with a weight of
-        Result: Who is on the scale with a weight of [Weight] kg?
-      #Le message principal de la notification. Exemple: Qui est sur la balance avec un poids de
-      #Résultat : Qui est la balance avec un poids de [Poids] kg ?.
-    response_timeout_seconds:
-      name: Notification Response Timeout (Seconds)
-      default: 60
-      selector:
-        number:
-          mode: slider
-          min: 10
-          max: 300
-          step: 10
-          unit_of_measurement: seconds
-      description: The number of seconds to wait for a response to the interactive notification.
-      #Le nombre de secondes à attendre pour une réponse à la notification interactive
     weight_sensor:
       name: Weight Sensor Entity
       description: The entity ID of your weight sensor.
@@ -69,14 +30,22 @@ blueprint:
       selector:
         text: {}
       description: Name of User 1.
+    user1_profile_id:
+      name: User 1 Profile id
+      selector:
+        entity:
+          filter:
+            domain: input_number
+      default: ""
+      description: Entity ID of the input_number for User 1's impedance.
       #Nom de l'utilisateur 1.
     user1_weight:
       name: User 1 Weight Input Number
       selector:
         entity:
           filter:
-            domain: input_number
-      description: Entity ID of the input_number for User 1's weight.
+            domain: sensor
+      description: Profile ID of the sensor for User 1's weight.
       #ID d'entité du input_number pour le poids de l'utilisateur 1.
     user1_impedance:
       name: User 1 Impedance Input Number (Optional)
@@ -123,6 +92,13 @@ blueprint:
       default: ""
       description: Name of User 2.
       #Nom de l'utilisateur 2.
+    user2_profile_id:
+      name: User 2 Profile ID
+      selector:
+        entity:
+          filter:
+            domain: sensor
+      description: Profile ID of the sensor for User 1's weight.
     user2_weight:
       name: User 2 Weight Input Number (Optional)
       selector:
@@ -177,6 +153,14 @@ blueprint:
       default: ""
       description: Name of User 3.
       #Nom de l'utilisateur 3.
+    user3_profile_id:
+      name: User 3 Profile id
+      selector:
+        entity:
+          filter:
+            domain: input_number
+      default: ""
+      description: Entity ID of the input_number for User 3's impedance.
     user3_weight:
       name: User 3 Weight Input Number (Optional)
       selector:
@@ -234,18 +218,21 @@ variables:
   split_weight_direction: !input split_weight_direction
   weight: "{{ states(weight_sensor) | float(0) }}"
   user1_name: !input user1_name
+  user1_profile_id: !input user1_profile_id
   user1_weight: !input user1_weight
   user1_impedance: !input user1_impedance
   user1_last_time: !input user1_last_time
   user1_enable_assistance_mode: !input user1_enable_assistance_mode
   user1_source_weight_entity: !input user1_source_weight_entity
   user2_name: !input user2_name
+  user2_profile_id: !input user2_profile_id
   user2_weight: !input user2_weight
   user2_impedance: !input user2_impedance
   user2_last_time: !input user2_last_time
   user2_enable_assistance_mode: !input user2_enable_assistance_mode
   user2_source_weight_entity: !input user2_source_weight_entity
   user3_name: !input user3_name
+  user3_profile_id: !input user3_profile_id
   user3_weight: !input user3_weight
   user3_impedance: !input user3_impedance
   user3_last_time: !input user3_last_time
