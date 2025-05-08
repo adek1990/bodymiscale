@@ -263,7 +263,7 @@ action:
       notification_id: "{{ context.id }}"
       current_weight: "{{ states(weight_sensor) | float(0) }}"
       impedance: "{{ states(impedance_sensor) | float(0) }}"
-      profile_id: "{{ states(profile_id) | int() }}"
+      profile_id: "{{ states(profile_id_sensor) | int() }}"
   - condition: template
     value_template: "{{ current_weight != 0 }}"
   - if: "{{ profile_id | length > 0 }}"
