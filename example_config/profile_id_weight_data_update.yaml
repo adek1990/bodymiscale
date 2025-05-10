@@ -275,7 +275,7 @@ action:
         {% if last_time_sensor != '' and states(last_time_sensor) not in ['unavailable', 'unknown', 'none'] and states(last_time_sensor) is defined %}
           {{ states(last_time_sensor) | as_datetime | as_local }}
         {% else %}
-          none
+          {{ now().strftime('%Y-%m-%d %H:%M:%S') }}
         {% endif %}
 
   - condition: template
