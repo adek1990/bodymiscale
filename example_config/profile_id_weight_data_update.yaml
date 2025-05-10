@@ -19,7 +19,7 @@ blueprint:
             domain: sensor
       default: ""
     profile_id_sensor:
-      name: "Impedance Sensor"
+      name: "Profile ID Sensor"
       description: "Select the Profile ID sensor (ESPHome or BLE Monitor)"
       selector:
         entity:
