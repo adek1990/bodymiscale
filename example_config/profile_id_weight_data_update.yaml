@@ -39,7 +39,6 @@ blueprint:
         number:
           min: 1
           max: 10
-      default: "1"
     user1_weight:
       name: "User 1 Weight Entity"
       selector:
@@ -65,7 +64,6 @@ blueprint:
         number:
           min: 1
           max: 10
-      default: "2"
     user2_weight:
       name: "User 2 Weight Entity"
       selector:
@@ -91,7 +89,6 @@ blueprint:
         number:
           min: 1
           max: 10
-      default: "3"
     user3_weight:
       name: "User 3 Weight Entity"
       selector:
