@@ -265,7 +265,7 @@ trigger:
     entity_id: !input weight_sensor
 
 action:
-  - delay: "00:00:02"
+  - delay: "00:00:15"
 
   - variables:
       weight: "{{ states(weight_sensor) | float(0) }}"
