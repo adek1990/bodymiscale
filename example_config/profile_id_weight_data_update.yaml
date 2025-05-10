@@ -1,302 +1,197 @@
 blueprint:
-  name: Profile ID User Selection and Weight Data Update
-  description: |
-   Profile ID to select who is on the scale and updates their weight data.
-    Additionally, you can create or update an input_datetime to automatically record the date and time of your last weigh-in.
-  #Envoie une notification interactive pour sélectionner qui est sur la balance et met à jour ses données de poids.
-  #De plus, vous pouvez créer ou mettre à jour un input_datetime pour enregistrer automatiquement la date et l'heure de votre dernière pesée.
+  name: "User Profile Sensor Assignment by Profile ID (input_number)"
+  description: "Assigns weight and impedance to user entities based on profile_id sensor and individual user profile IDs"
   domain: automation
   input:
+    profile_id_sensor:
+      name: "Profile ID Sensor"
+      description: "Sensor providing current profile ID (1–3)"
+      selector:
+        entity:
+          filter:
+            domain: sensor
+
     weight_sensor:
-      name: Weight Sensor Entity
-      description: The entity ID of your weight sensor.
-      #L'ID d'entité de votre capteur de poids.
+      name: "Weight Sensor"
       selector:
         entity:
           filter:
             domain: sensor
     impedance_sensor:
-      name: Impedance Sensor Entity (Optional)
-      description: The entity ID of your impedance sensor (if available).
-      #L'ID d'entité de votre capteur d'impédance (si disponible).
+      name: "Impedance Sensor"
       selector:
         entity:
           filter:
             domain: sensor
       default: ""
-    profile_id_sensor:
-      name: Profile id sensor
-      description: Profile id sensor
+    last_time_sensor:
+      name: "Last Time Sensor"
       selector:
         entity:
           filter:
             domain: sensor
+      default: ""
 
-
-    user1_name:
-      name: User 1 Name
-      selector:
-        text: {}
-      description: Name of User 1.
+    # Profile ID per user
     user1_profile_id:
-      name: Profile ID – User 1
-      description: Numerical profile ID assigned by the scale for User 1 (e.g. 1)
-      default: 1
+      name: "User 1 Profile ID"
       selector:
         number:
           min: 1
-          max: 100
-          mode: box
-          step: 1
+          max: 10
     user1_weight:
-      name: User 1 Weight Input Number (Optional)
+      name: "User 1 Weight Entity"
       selector:
         entity:
           filter:
             domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User1's weight.
-
     user1_impedance:
-      name: User 1 Impedance Input Number (Optional)
+      name: "User 1 Impedance Entity"
       selector:
         entity:
           filter:
             domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User 1's impedance.
-      #ID d'entité du input_number pour l'impédance de l'utilisateur 1.
     user1_last_time:
-      name: User 1 Last Weigh-in (Optional)
+      name: "User 1 Last Time Entity"
       selector:
         entity:
           filter:
             domain: input_datetime
-      default: ""
-      description: Entity ID of the input_datetime for User 1's last weigh-in.
-      #ID d'entité de la date et de l'heure d'entrée pour la dernière pesée de l'utilisateur 1.
 
-    user2_name:
-      name: User 2 Name (Optional)
-      selector:
-        text: {}
-      default: ""
-      description: Name of User 2.
-      #Nom de l'utilisateur 2.
     user2_profile_id:
-      name: Profile ID – User 2
-      description: Numerical profile ID assigned by the scale for User 2 (e.g. 1)
-      default: 2
+      name: "User 2 Profile ID"
       selector:
         number:
           min: 1
-          max: 100
-          mode: box
-          step: 1
+          max: 10
     user2_weight:
-      name: User 2 Weight Input Number (Optional)
+      name: "User 2 Weight Entity"
       selector:
         entity:
           filter:
             domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User 2's weight.
-      #ID d'entité du input_number pour le poids de l'utilisateur 2.
     user2_impedance:
-      name: User 2 Impedance Input Number (Optional)
+      name: "User 2 Impedance Entity"
       selector:
         entity:
           filter:
             domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User 2's impedance.
-      #ID d'entité du input_number pour l'impédance de l'utilisateur 2.
     user2_last_time:
-      name: User 2 Last Weigh-in (Optional)
+      name: "User 2 Last Time Entity"
       selector:
         entity:
           filter:
             domain: input_datetime
-      default: ""
-      description: Entity ID of the input_datetime for User 2's last weigh-in
-      #ID d'entité de la date et de l'heure d'entrée pour la dernière pesée de l'utilisateur 2
 
-    user3_name:
-      name: User 3 Name (Optional)
-      selector:
-        text: {}
-      default: ""
-      description: Name of User 3.
-      #Nom de l'utilisateur 3.
     user3_profile_id:
-      name: Profile ID – User 3
-      description: Numerical profile ID assigned by the scale for User 3 (e.g. 1)
-      default: 3
+      name: "User 3 Profile ID"
       selector:
         number:
           min: 1
-          max: 100
-          mode: box
-          step: 1
+          max: 10
     user3_weight:
-      name: User 3 Weight Input Number (Optional)
+      name: "User 3 Weight Entity"
       selector:
         entity:
           filter:
             domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User 3's weight.
-      #ID d'entité du input_number pour le poids de l'utilisateur 3.
     user3_impedance:
-      name: User 3 Impedance Input Number (Optional)
+      name: "User 3 Impedance Entity"
       selector:
         entity:
           filter:
             domain: input_number
-      default: ""
-      description: Entity ID of the input_number for User 3's impedance.
-      #ID d'entité du input_number pour l'impédance de l'utilisateur 3.
     user3_last_time:
-      name: User 3 Last Weigh-in (Optional)
+      name: "User 3 Last Time Entity"
       selector:
         entity:
           filter:
             domain: input_datetime
-      default: ""
-      description: Entity ID of the input_datetime for User 3's last weigh-in
-
-variables:
-  weight_sensor: !input weight_sensor
-  impedance_sensor: !input impedance_sensor
-  profile_id_sensor: !input profile_id_sensor
-  weight: "{{ states(weight_sensor) | float(0) }}"
-  user1_name: !input user1_name
-  user1_profile_id: !input user1_profile_id
-  user1_weight: !input user1_weight
-  user1_impedance: !input user1_impedance
-  user1_last_time: !input user1_last_time
-  user2_name: !input user2_name
-  user2_profile_id: !input user2_profile_id
-  user2_weight: !input user2_weight
-  user2_impedance: !input user2_impedance
-  user2_last_time: !input user2_last_time
-  user3_name: !input user3_name
-  user3_profile_id: !input user3_profile_id
-  user3_weight: !input user3_weight
-  user3_impedance: !input user3_impedance
-  user3_last_time: !input user3_last_time
 
 trigger:
-  - trigger: state
+  - platform: state
     entity_id: !input weight_sensor
 
 action:
-  - delay: "00:00:15"
+  - delay: "00:00:10"
 
   - variables:
-      current_weight: "{{ states(weight_sensor) | float(0) }}"
+      weight: "{{ states(weight_sensor) | float(0) }}"
       impedance: "{{ states(impedance_sensor) | float(0) }}"
-      profile_id: "{{ states(profile_id_sensor) | int() }}"
+      last_time: >-
+        {% if last_time_sensor != '' and states(last_time_sensor) not in ['unavailable', 'unknown', 'none'] %}
+          {{ states(last_time_sensor) | as_datetime | as_local }}
+        {% else %}
+          none
+        {% endif %}
+      profile_id: "{{ states(profile_id_sensor) | int(0) }}"
+
   - condition: template
-    value_template: "{{ current_weight != 0 }}"
-  - if: "{{ profile_id | length > 0 }}"
-    then:
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ profile_id == user1_profile_id }}"
-            sequence:
-              - variables:
-                  final_weight_user1: >
-                      {{ current_weight }}
-              - service: input_number.set_value
-                target:
-                  entity_id: "{{ user1_weight }}"
-                data:
-                  value: "{{ final_weight_user1 }}"
-              - choose:
-                  - conditions:
-                      - condition: template
-                        value_template: "{{ user1_impedance != '' and impedance_sensor is defined and impedance_sensor != '' and states(impedance_sensor) not in ['unavailable', 'unknown'] }}"
-                    sequence:
-                      - service: input_number.set_value
-                        target:
-                          entity_id: "{{ user1_impedance }}"
-                        data:
-                          value: "{{ impedance }}"
-              - choose:
-                  - conditions:
-                      - condition: template
-                        value_template: "{{ user1_last_time != '' }}"
-                    sequence:
-                      - service: input_datetime.set_datetime
-                        target:
-                          entity_id: "{{ user1_last_time }}"
-                        data:
-                          datetime: "{{ now().isoformat() }}"
-  
-          - conditions:
-              - condition: template
-                value_template: "{{ profile_id == user2_profile_id }}"
-            sequence:
-              - variables:
-                  final_weight_user2: >
-                      {{ current_weight }}
-              - service: input_number.set_value
-                target:
-                  entity_id: "{{ user2_weight }}"
-                data:
-                  value: "{{ final_weight_user2 }}"
-              - choose:
-                  - conditions:
-                      - condition: template
-                        value_template: "{{ user2_impedance != '' and impedance_sensor is defined and impedance_sensor != '' and states(impedance_sensor) not in ['unavailable', 'unknown'] }}"
-                    sequence:
-                      - service: input_number.set_value
-                        target:
-                          entity_id: "{{ user2_impedance }}"
-                        data:
-                          value: "{{ impedance }}"
-              - choose:
-                  - conditions:
-                      - condition: template
-                        value_template: "{{ user2_last_time != '' }}"
-                    sequence:
-                      - service: input_datetime.set_datetime
-                        target:
-                          entity_id: "{{ user2_last_time }}"
-                        data:
-                          datetime: "{{ now().isoformat() }}"
-  
-          - conditions:
-              - condition: template
-                value_template: "{{ profile_id == user3_profile_id }}"
-            sequence:
-              - variables:
-                  final_weight_user3: >
-                      {{ current_weight }}
-              - service: input_number.set_value
-                target:
-                  entity_id: "{{ user3_weight }}"
-                data:
-                  value: "{{ final_weight_user3 }}"
-              - choose:
-                  - conditions:
-                      - condition: template
-                        value_template: "{{ user3_impedance != '' and impedance_sensor is defined and impedance_sensor != '' and states(impedance_sensor) not in ['unavailable', 'unknown'] }}"
-                    sequence:
-                      - service: input_number.set_value
-                        target:
-                          entity_id: "{{ user3_impedance }}"
-                        data:
-                          value: "{{ impedance }}"
-              - choose:
-                  - conditions:
-                      - condition: template
-                        value_template: "{{ user3_last_time != '' }}"
-                    sequence:
-                      - service: input_datetime.set_datetime
-                        target:
-                          entity_id: "{{ user3_last_time }}"
-                        data:
-                          datetime: "{{ now().isoformat() }}"
+    value_template: "{{ weight > 0 }}"
+
+  - choose:
+      - conditions: "{{ profile_id == (states('input_number.user1_profile_id') | int(0)) }}"
+        sequence:
+          - service: input_number.set_value
+            target:
+              entity_id: !input user1_weight
+            data:
+              value: "{{ weight }}"
+          - condition: template
+            value_template: "{{ impedance > 0 }}"
+          - service: input_number.set_value
+            target:
+              entity_id: !input user1_impedance
+            data:
+              value: "{{ impedance }}"
+          - condition: template
+            value_template: "{{ last_time != none }}"
+          - service: input_datetime.set_datetime
+            target:
+              entity_id: !input user1_last_time
+            data:
+              datetime: "{{ last_time }}"
+
+      - conditions: "{{ profile_id == (states('input_number.user2_profile_id') | int(0)) }}"
+        sequence:
+          - service: input_number.set_value
+            target:
+              entity_id: !input user2_weight
+            data:
+              value: "{{ weight }}"
+          - condition: template
+            value_template: "{{ impedance > 0 }}"
+          - service: input_number.set_value
+            target:
+              entity_id: !input user2_impedance
+            data:
+              value: "{{ impedance }}"
+          - condition: template
+            value_template: "{{ last_time != none }}"
+          - service: input_datetime.set_datetime
+            target:
+              entity_id: !input user2_last_time
+            data:
+              datetime: "{{ last_time }}"
+
+      - conditions: "{{ profile_id == (states('input_number.user3_profile_id') | int(0)) }}"
+        sequence:
+          - service: input_number.set_value
+            target:
+              entity_id: !input user3_weight
+            data:
+              value: "{{ weight }}"
+          - condition: template
+            value_template: "{{ impedance > 0 }}"
+          - service: input_number.set_value
+            target:
+              entity_id: !input user3_impedance
+            data:
+              value: "{{ impedance }}"
+          - condition: template
+            value_template: "{{ last_time != none }}"
+          - service: input_datetime.set_datetime
+            target:
+              entity_id: !input user3_last_time
+            data:
+              datetime: "{{ last_time }}"
