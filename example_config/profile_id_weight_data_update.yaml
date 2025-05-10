@@ -1,6 +1,6 @@
 blueprint:
-  name: "User Profile Sensor Assignment by Profile ID (input_number)"
-  description: "Assigns weight and impedance to user entities based on profile_id sensor and individual user profile IDs"
+  name: "Creation and Management of User Sensors for BodyMiScale Sensor Assignment by Profile ID"
+  description: "Updates user entities based on weight measurements from the scale, filtering by user-defined profile id."
   domain: automation
   input:
     weight_sensor:
